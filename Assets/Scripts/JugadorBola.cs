@@ -51,7 +51,7 @@ public class JugadorBola : MonoBehaviour
             {
                 GameOver();
             }
-            if(miPuntuacion == 25)
+            if(miPuntuacion >= 25)
             {
                 nextLevel();
             }
@@ -118,24 +118,8 @@ public class JugadorBola : MonoBehaviour
         {
             ValZ += 6.0f;
             plataformainicial = Instantiate(suelo, new Vector3(ValX, 0, ValZ), Quaternion.identity);
-            /*float posY = 0.25f;
-            float posZ = ValZ;
-            if (Random.value < 0.6f)  // Ajusta el valor según la probabilidad deseada
-            {
-                InstanciarEstrellas(new Vector3(ValX, posY, posZ));
-            }*/
         }
     }
-
-   /* void InstanciarEstrellas(Vector3 posicion)
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            float offsetX = Random.Range(-2.0f, 20.0f);  // Ajusta según tus necesidades
-            float offsetZ = Random.Range(-2.0f, 50.0f);  // Ajusta según tus necesidades
-            Instantiate(estrella, new Vector3(posicion.x + offsetX, posicion.y, posicion.z + offsetZ), Quaternion.identity);
-        }
-    }*/
 
     void OnTriggerEnter(Collider other)
     {

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -227,7 +227,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -90.4, y: -79.9}
+  m_AnchoredPosition: {x: -118.3, y: -79.9}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &342557174
@@ -628,7 +628,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 135.7, y: -79.899994}
+  m_AnchoredPosition: {x: 129, y: -79.899994}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &467516210
@@ -1427,7 +1427,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -431.4, y: -224.5}
+  m_AnchoredPosition: {x: -435.2, y: -182.6}
   m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1018639624
@@ -1762,6 +1762,10 @@ MonoBehaviour:
   suelo: {fileID: 2044930100}
   velocidad: 5
   canvasGameOver: {fileID: 1743253669}
+  estrella: {fileID: 4759499909199867169, guid: fd62231970381f34dbd94be2e7e527b4, type: 3}
+  plataformactual: {fileID: 0}
+  plataformainicial: {fileID: 0}
+  audioSource: {fileID: 0}
   textoPuntuacion: {fileID: 431091709}
   textoPuntuacionTotal: {fileID: 912007403}
 --- !u!135 &1436101026
@@ -1965,6 +1969,10 @@ MonoBehaviour:
   suelo: {fileID: 2044930100}
   velocidad: 5
   canvasGameOver: {fileID: 1743253669}
+  estrella: {fileID: 0}
+  plataformactual: {fileID: 0}
+  plataformainicial: {fileID: 0}
+  audioSource: {fileID: 0}
   textoPuntuacion: {fileID: 431091709}
   textoPuntuacionTotal: {fileID: 912007403}
 --- !u!114 &1743253667
@@ -2058,6 +2066,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2294447844969409084, guid: 8c5d13fda4838c34ead5fe10a835e6e5, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2294447844969409084, guid: 8c5d13fda4838c34ead5fe10a835e6e5, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2294447844969409084, guid: 8c5d13fda4838c34ead5fe10a835e6e5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
