@@ -13,6 +13,7 @@ public class JugadorBola : MonoBehaviour
     public GameObject suelo;
     public float velocidad = 5;
     public Canvas canvasGameOver;
+    public Canvas canvasVictoria;
     public GameObject estrella;
     public Transform plataformactual;
     public GameObject plataformainicial;
@@ -21,11 +22,12 @@ public class JugadorBola : MonoBehaviour
     private float ValX, ValZ;
     private Vector3 DireccionActual;
     private bool juegoTerminado = false;
-    private int miPuntuacion = -1;
+    private int miPuntuacion = 0;
     private int aleatorio2;
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private TMP_Text textoPuntuacion;
     [SerializeField] private TMP_Text textoPuntuacionTotal;
+    [SerializeField] private TMP_Text textoPuntuacionTotalWin;
 
 
     // Start is called before the first frame update
@@ -51,7 +53,12 @@ public class JugadorBola : MonoBehaviour
             {
                 GameOver();
             }
-            if(miPuntuacion >= 25)
+            int nivelActual = SceneManager.GetActiveScene().buildIndex;
+            if(miPuntuacion >= 8 && nivelActual == 3)
+            {
+                Victoria();
+            }
+            if(miPuntuacion >= 5 && nivelActual != 3)
             {
                 nextLevel();
             }
@@ -62,6 +69,12 @@ public class JugadorBola : MonoBehaviour
     {
         juegoTerminado = true;
         canvasGameOver.gameObject.SetActive(true);
+    }
+
+    void Victoria()
+    {
+        juegoTerminado = true;
+        canvasVictoria.gameObject.SetActive(true);
     }
 
     private void OnCollisionExit(Collision other)
@@ -87,7 +100,7 @@ public class JugadorBola : MonoBehaviour
 
         plataformactual = Instantiate(suelo, new Vector3(ValX, 0, ValZ), Quaternion.identity).transform;
         aleatorio2 = Random.Range(0, 5);
-        if(aleatorio2 < 2)
+        if(aleatorio2 < 3)
         {
             float offsetX = Random.Range(-2.0f, 2.0f);
             float offsetZ = Random.Range(-2.0f, 2.0f);
@@ -126,23 +139,22 @@ public class JugadorBola : MonoBehaviour
         if (other.gameObject.CompareTag("estrella"))
         {
             Debug.Log("Colision con la estrella");
-            Destroy(other.gameObject); // Destruir la estrella
-
-        // Reproducir el sonido asociado al AudioSource
+            Destroy(other.gameObject);
             if (audioSource != null && audioSource.clip != null)
             {
                 audioSource.PlayOneShot(audioSource.clip);
             }
 
-            IncrementarPuntuacion(); // Incrementar la puntuación del jugador u realizar otras acciones según sea necesario
+            IncrementarPuntuacion();
         }
     }
 
     void IncrementarPuntuacion()
     {
-        miPuntuacion +=3;
+        miPuntuacion ++;
         textoPuntuacion.text = miPuntuacion.ToString();
         textoPuntuacionTotal.text = textoPuntuacion.text;
+        textoPuntuacionTotalWin.text = textoPuntuacion.text;
     }
 
     void nextLevel()
@@ -157,6 +169,11 @@ public class JugadorBola : MonoBehaviour
     public void Reiniciar()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void PlayAgain()
+    {
+       SceneManager.LoadScene("nivel1");
     }
 
     public void Salir()
