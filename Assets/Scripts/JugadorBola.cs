@@ -4,6 +4,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Audio;
+using Random = UnityEngine.Random;
 
 public class JugadorBola : MonoBehaviour
 {
@@ -11,16 +13,21 @@ public class JugadorBola : MonoBehaviour
     public GameObject suelo;
     public float velocidad = 5;
     public Canvas canvasGameOver;
+    public Canvas canvasVictoria;
     public GameObject estrella;
-    
+    public Transform plataformactual;
+    public GameObject plataformainicial;
 
     private Vector3 offset;
     private float ValX, ValZ;
     private Vector3 DireccionActual;
     private bool juegoTerminado = false;
-    private int miPuntuacion = -1;
+    private int miPuntuacion = 0;
+    private int aleatorio2;
+    [SerializeField] private AudioSource audioSource;
     [SerializeField] private TMP_Text textoPuntuacion;
     [SerializeField] private TMP_Text textoPuntuacionTotal;
+    [SerializeField] private TMP_Text textoPuntuacionTotalWin;
 
 
     // Start is called before the first frame update
@@ -46,7 +53,12 @@ public class JugadorBola : MonoBehaviour
             {
                 GameOver();
             }
-            if(miPuntuacion == 25)
+            int nivelActual = SceneManager.GetActiveScene().buildIndex;
+            if(miPuntuacion >= 8 && nivelActual == 3)
+            {
+                Victoria();
+            }
+            if(miPuntuacion >= 5 && nivelActual != 3)
             {
                 nextLevel();
             }
@@ -57,6 +69,12 @@ public class JugadorBola : MonoBehaviour
     {
         juegoTerminado = true;
         canvasGameOver.gameObject.SetActive(true);
+    }
+
+    void Victoria()
+    {
+        juegoTerminado = true;
+        canvasVictoria.gameObject.SetActive(true);
     }
 
     private void OnCollisionExit(Collision other)
@@ -80,7 +98,14 @@ public class JugadorBola : MonoBehaviour
             ValZ += 6.0f;
         }
 
-        Instantiate(suelo, new Vector3(ValX, 0, ValZ), Quaternion.identity);
+        plataformactual = Instantiate(suelo, new Vector3(ValX, 0, ValZ), Quaternion.identity).transform;
+        aleatorio2 = Random.Range(0, 5);
+        if(aleatorio2 < 3)
+        {
+            float offsetX = Random.Range(-2.0f, 2.0f);
+            float offsetZ = Random.Range(-2.0f, 2.0f);
+            Instantiate(estrella, plataformactual.position + new Vector3(offsetX, 0.5f, offsetZ), estrella.transform.rotation);
+        }  
         yield return new WaitForSeconds(2);
         suelo.gameObject.GetComponent<Rigidbody>().isKinematic = false;
         suelo.gameObject.GetComponent<Rigidbody>().useGravity = true;
@@ -97,7 +122,6 @@ public class JugadorBola : MonoBehaviour
         else
         {
             DireccionActual = Vector3.forward;
-            IncrementarPuntuacion();
         }
     }
 
@@ -106,33 +130,22 @@ public class JugadorBola : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             ValZ += 6.0f;
-            Instantiate(suelo, new Vector3(ValX, 0, ValZ), Quaternion.identity);
-            float posY = 0.25f;
-            float posZ = ValZ;
-            if (Random.value < 0.6f)  // Ajusta el valor según la probabilidad deseada
-            {
-                InstanciarEstrellas(new Vector3(ValX, posY, posZ));
-            }
+            plataformainicial = Instantiate(suelo, new Vector3(ValX, 0, ValZ), Quaternion.identity);
         }
     }
 
-    void InstanciarEstrellas(Vector3 posicion)
-    {
-        for (int i = 0; i < 3; i++)
-        {
-            float offsetX = Random.Range(-2.0f, 20.0f);  // Ajusta según tus necesidades
-            float offsetZ = Random.Range(-2.0f, 50.0f);  // Ajusta según tus necesidades
-            Instantiate(estrella, new Vector3(posicion.x + offsetX, posicion.y, posicion.z + offsetZ), Quaternion.identity);
-        }
-    }
-
-    private void OnCollisionEnter(Collision other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("estrella"))
         {
-            miPuntuacion += 5;
-            textoPuntuacion.text = miPuntuacion.ToString();
-            textoPuntuacionTotal.text = textoPuntuacion.text;
+            Debug.Log("Colision con la estrella");
+            Destroy(other.gameObject);
+            if (audioSource != null && audioSource.clip != null)
+            {
+                audioSource.PlayOneShot(audioSource.clip);
+            }
+
+            IncrementarPuntuacion();
         }
     }
 
@@ -141,6 +154,7 @@ public class JugadorBola : MonoBehaviour
         miPuntuacion ++;
         textoPuntuacion.text = miPuntuacion.ToString();
         textoPuntuacionTotal.text = textoPuntuacion.text;
+        textoPuntuacionTotalWin.text = textoPuntuacion.text;
     }
 
     void nextLevel()
@@ -155,6 +169,11 @@ public class JugadorBola : MonoBehaviour
     public void Reiniciar()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void PlayAgain()
+    {
+       SceneManager.LoadScene("nivel1");
     }
 
     public void Salir()

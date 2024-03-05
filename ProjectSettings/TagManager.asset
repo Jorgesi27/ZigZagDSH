@@ -7,6 +7,7 @@ TagManager:
   - suelo
   - ZonaDeMuerte
   - estrella
+  - premio
   layers:
   - Default
   - TransparentFX
